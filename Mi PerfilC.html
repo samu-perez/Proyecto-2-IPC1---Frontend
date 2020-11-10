@@ -31,7 +31,7 @@
         function MostrarMiPerfil(){
             var usuario = sessionStorage.usuario
 
-            fetch(`http://localhost:3000/usuarios/${usuario}`)
+            fetch(`https://proyecto2ipc.herokuapp.com/usuarios/${usuario}`)
             .then(response => response.json())
             .catch(error => {
                 console.log(error)
@@ -59,7 +59,7 @@
             }
             console.log(objeto)
 
-            fetch(`http://localhost:3000/usuarios/${username}`, {
+            fetch(`https://proyecto2ipc.herokuapp.com/usuarios/${username}`, {
                 method: 'PUT',
                 body: JSON.stringify(objeto), // Siempre convertir en JSON nuestro objeto
                 headers:{

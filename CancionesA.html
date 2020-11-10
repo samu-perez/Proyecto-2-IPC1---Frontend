@@ -108,7 +108,7 @@
               }
           console.log(objeto)
             
-          fetch('http://localhost:3000/canciones', {
+          fetch('https://proyecto2ipc.herokuapp.com/canciones', {
             method: 'POST',
             body: JSON.stringify(objeto),
             headers:{
@@ -142,7 +142,7 @@
           
         var contenido = document.querySelector('#CuerpoCanciones') 
         contenido.innerHTML = ""
-        fetch('http://localhost:3000/canciones')
+        fetch('https://proyecto2ipc.herokuapp.com/canciones')
         .then(response => response.json())
         .catch(error => {
           console.log(error)

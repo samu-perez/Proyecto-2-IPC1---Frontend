@@ -51,7 +51,7 @@
           
         var contenido = document.querySelector('#CuerpoCanciones') 
         contenido.innerHTML = ""
-        fetch(`http://localhost:3000/playlist/${usuario}`)
+        fetch(`https://proyecto2ipc.herokuapp.com/playlist/${usuario}`)
         .then(response => response.json())
         .catch(error => {
           console.log(error)

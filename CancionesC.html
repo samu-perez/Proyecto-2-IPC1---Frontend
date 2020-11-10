@@ -60,7 +60,7 @@
           
         var contenido = document.querySelector('#CuerpoCanciones') 
         contenido.innerHTML = ""
-        fetch('http://localhost:3000/canciones')
+        fetch('https://proyecto2ipc.herokuapp.com/canciones')
         .then(response => response.json())
         .catch(error => {
           console.log(error)
@@ -88,7 +88,7 @@
         var usuario = sessionStorage.usuario
         var spotify
 
-        fetch(`http://localhost:3000/canciones/${id}`)
+        fetch(`https://proyecto2ipc.herokuapp.com/canciones/${id}`)
         .then(response => response.json())
         .catch(error => {
           console.log(error)
@@ -103,7 +103,7 @@
           }
           console.log(objeto)
 
-          fetch('http://localhost:3000/playlist', {
+          fetch('https://proyecto2ipc.herokuapp.com/playlist', {
             method: 'POST',
             body: JSON.stringify(objeto),
             headers:{

@@ -61,7 +61,7 @@
 
         var tabla = document.querySelector('#CuerpoSolicitudes')
 
-        fetch('http://localhost:3000/solicitudes')
+        fetch('https://proyecto2ipc.herokuapp.com/solicitudes')
         .then(response => response.json())
         .catch(error => {
             console.log(error)
@@ -89,7 +89,7 @@
         var id = boton.value
         var nombre, artista, album, imagen, fecha, spotify, youtube
 
-        fetch(`http://localhost:3000/solicitudes/${id}`)
+        fetch(`https://proyecto2ipc.herokuapp.com/solicitudes/${id}`)
         .then(response => response.json())
         .catch(error => {
           console.log(error)
@@ -117,7 +117,7 @@
           console.log(objeto)
           
           //Para agregar la solicitud a la lista de canciones
-          fetch('http://localhost:3000/canciones', {
+          fetch('https://proyecto2ipc.herokuapp.com/canciones', {
             method: 'POST',
             body: JSON.stringify(objeto),
             headers:{
@@ -136,7 +136,7 @@
 
 
           //Para eliminar la solicitud de la lista despues de ser aceptada
-          fetch(`http://localhost:3000/solicitudes/${id}`, {
+          fetch(`https://proyecto2ipc.herokuapp.com/solicitudes/${id}`, {
               method: 'DELETE',
           })
           .then(res => res.json())
@@ -159,7 +159,7 @@
         
         var id = boton.value
         
-        fetch(`http://localhost:3000/solicitudes/${id}`, {
+        fetch(`https://proyecto2ipc.herokuapp.com/solicitudes/${id}`, {
                 method: 'DELETE',
         })
         .then(res => res.json())

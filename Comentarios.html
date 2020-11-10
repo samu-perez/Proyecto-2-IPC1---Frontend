@@ -81,7 +81,7 @@
           
         var contenido = document.querySelector('#CuerpoCanciones') 
         contenido.innerHTML = ""
-        fetch(`http://localhost:3000/canciones/${id}`)
+        fetch(`https://proyecto2ipc.herokuapp.com/canciones/${id}`)
         .then(response => response.json())
         .catch(error => {
           console.log(error)
@@ -111,7 +111,7 @@
 
         var contenido = document.querySelector('#CuerpoComentarios') 
         contenido.innerHTML = ""
-        fetch(`http://localhost:3000/comentarios/${id}`)
+        fetch(`https://proyecto2ipc.herokuapp.com/comentarios/${id}`)
         .then(response => response.json())
         .catch(error => {
           console.log(error)
