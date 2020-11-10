@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Perfil Cancion</title>
+    <link rel="stylesheet" href="Perfil.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css">
+
+</head>
+
+<body onload="MostrarCancion()">
+    <form action="Perfil Cancion.html" class="form-box animated fadeInUp">
+        <h1 class="form-title">Informacion de la cancion seleccionada</h1>
+        <input id="nombre" type="text" placeholder="Nombre" autofocus>
+        <input id="artista" type="text" placeholder="Artista" autofocus>
+        <input id="album" type="text" placeholder="Album" autofocus>
+        <input id="imagen" type="text" placeholder="Imagen">
+        <input id="fecha" type="text" placeholder="Fecha">
+        <input id="spotify" type="text" placeholder="Link Spotify">
+        <input id="youtube" type="text" placeholder="Link Youtube">
+        
+        <div>
+            <button onclick="Modificar()" type="button">Modificar</button>
+            <button onclick="Eliminar()" type="button">Eliminar</button>
+            <button onclick="Comentarios()" type="button">Comentarios</button>
+            <button onclick="Regresar()" type="button">Regresar</button>
+        
+        </div>
+        
+    </form>
+
+    <script>
+        function MostrarCancion(){
+            var id = sessionStorage.buscar
+
+            fetch(`http://localhost:3000/canciones/${id}`)
+            .then(response => response.json())
+            .catch(error => {
+                console.log(error)
+            })
+            .then(res =>{
+                console.log(res)
+                document.querySelector('#nombre').value = res.nombre
+                document.querySelector('#artista').value = res.artista
+                document.querySelector('#album').value = res.album 
+                document.querySelector('#imagen').value = res.imagen
+                document.querySelector('#fecha').value = res.fecha
+                document.querySelector('#spotify').value = res.spotify
+                document.querySelector('#youtube').value = res.youtube
+            })
+        }
+
+        function Modificar(){
+            var nombre = document.querySelector('#nombre').value
+            var artista = document.querySelector('#artista').value
+            var album = document.querySelector('#album').value
+            var imagen = document.querySelector('#imagen').value
+            var fecha = document.querySelector('#fecha').value
+            var spotify = document.querySelector('#spotify').value
+            var youtube = document.querySelector('#youtube').value
+
+            var objeto = {
+                'nombre': nombre,
+                'artista': artista,
+                'album': album,
+                'imagen': imagen,
+                'fecha': fecha,
+                'spotify': spotify,
+                'youtube': youtube
+            }
+            console.log(objeto)
+
+            var id = sessionStorage.buscar
+
+            fetch(`http://localhost:3000/canciones/${id}`, {
+                method: 'PUT',
+                body: JSON.stringify(objeto), // Siempre convertir en JSON nuestro objeto
+                headers:{
+                    'Content-Type': 'application/json'
+                } 
+            })
+            .then(res => res.json())
+            .catch(error => {
+                console.error('Error:', error)
+                alert("Ocurrio un error al consumir la API, revise la consola")
+            })
+            .then(response =>{
+                console.log('Success:', response);
+                alert(response.message)
+                location.href="CancionesA.html"
+            }) 
+
+        }
+
+        function Eliminar(){       
+        
+            var id = sessionStorage.buscar
+            fetch(`http://localhost:3000/canciones/${id}`, {
+                method: 'DELETE',
+            })
+            .then(res => res.json())
+            .catch(error => {
+                console.error('Error:', error)
+                alert("Ocurrio un error al consumir la API, revise la consola")
+            })
+            .then(response =>{
+                console.log('Success:', response);
+                alert(response.message)
+                location.href="CancionesA.html"
+            }) 
+        }
+
+        function Comentarios(){
+            location.href="Comentarios.html"
+        }
+
+        function Regresar(){
+            location.href="CancionesA.html"
+        }
+    </script>>
+</body>
+
+</html>

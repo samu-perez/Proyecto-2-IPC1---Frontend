@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Usuarios</title> </head>
+    <link rel="stylesheet" href="main.css">
+
+    <header>
+      <div id="sidebar">
+      <div class="toggle-btn">
+        <span>&#9776</span>
+      </div>
+      <ul>
+        <li>
+          <img src="img/logo.jpg" alt="Logo Fazt" class="logo">
+        </li>
+        <li id="logeado" >User</li>
+        <li><a href="#about"><i class="bx bx-user"></i> <span onclick="MiPerfil()">Mi Perfil</span></a></li> 
+        <li><a href="#about"><i class="bx bx-user"></i> <span onclick="Canciones()">Canciones</span></a></li>
+        <li><a href="#about"><i class="bx bx-user"></i> <span onclick="">Usuarios</span></a></li>
+        <li><a href="#about"><i class="bx bx-user"></i> <span onclick="Solicitudes()">Solicitudes</span></a></li>
+        <li><a href="#about"><i class="bx bx-user"></i> <span onclick="RegistroAdmin()">Registro</span></a></li>
+        <li><a href="#about"><i class="bx bx-user"></i> <span onclick="CerrarSesion()">Cerrar Sesion</span></a></li>    
+
+      </ul>
+    </div>
+    </header>
+  <body onload="MostrarUsuarios()">
+
+    <form>
+    <div class="">
+      <h2>Usuarios registrados</h2>
+    </div>
+    <table>
+      <thead>
+        <tr>
+        <th scope="col">Nombre</th>
+        <th scope="col">Apellido</th>
+        <th scope="col">Usuario</th>
+        <th scope="col">Acciones</th>
+        </tr>
+
+      </thead>
+     
+      <tbody id="CuerpoUsuarios">
+      </tbody>
+    </table>
+    </form>
+
+    <!-- script para conectar con el archivo main.js -->
+    <script src="main.js"></script>
+    <script>
+
+      function MostrarUsuarios(){
+        
+        var nombre = document.querySelector('#logeado')
+        var iniciado = sessionStorage.usuario
+        nombre.innerHTML = iniciado 
+
+        var tabla = document.querySelector('#CuerpoUsuarios')
+
+        fetch('http://localhost:3000/usuarios')
+        .then(response => response.json())
+        .catch(error => {
+            console.log(error)
+          })
+
+        .then(res => {
+        for (var i in res) {
+          tabla.innerHTML += 
+                `<tr>
+                <th>  ${res[i].Nombre} </th>
+                <th>  ${res[i].Apellido} </th>
+                <th>  ${res[i].Username} </th>
+                <th> <button type="button" value="${res[i].Username}" onclick="verUsuario(this)" class="btn btn-success">Acceder</button>
+                </th>
+                </tr>`
+
+            }
+
+          })
+      }
+
+      function verUsuario(boton){
+        
+        var usuario = boton.value
+          
+        sessionStorage.setItem("buscar", usuario)
+          
+        location.href="Perfil.html"
+      }
+
+      function MiPerfil(){
+        location.href="Mi PerfilA.html"
+      }
+
+      function Canciones(){
+        location.href="CancionesA.html"
+      }
+
+      function Solicitudes(){
+        location.href="Solicitudes.html"
+      }
+
+      function RegistroAdmin(){
+        location.href="RegistroAdmin.html"
+      }
+
+      function CerrarSesion(){
+        location.href="Login.html"
+      }
+
+    </script>
+
+  </body>
+</html>

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Mi Perfil</title>
+    <link rel="stylesheet" href="Perfil.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css">
+
+</head>
+
+<body onload="MostrarMiPerfil()">
+    <form action="Mi PerfilA.html" class="form-box animated fadeInUp">
+        <h1 class="form-title">Mi Perfil</h1>
+        <input id="nombre" type="text" placeholder="Nombre" autofocus>
+        <input id="apellido" type="text" placeholder="Apellido" autofocus>
+        <input id="username" type="text" placeholder="Usuario" autofocus>
+        <input id="contraseña" type="text" placeholder="Contraseña">
+        
+        <div>
+            <button onclick="Modificar()" type="button">Modificar</button>
+            <button onclick="Regresar()" type="button">Regresar</button>
+        
+        </div>
+        
+    </form>
+
+    <script>
+        function MostrarMiPerfil(){
+            var usuario = sessionStorage.usuario
+
+            fetch(`http://localhost:3000/usuarios/${usuario}`)
+            .then(response => response.json())
+            .catch(error => {
+                console.log(error)
+            })
+            .then(res =>{
+                console.log(res)
+                document.querySelector('#nombre').value = res.Nombre
+                document.querySelector('#apellido').value = res.Apellido
+                document.querySelector('#username').value = res.Username 
+                document.querySelector('#contraseña').value = res.Contra
+            })
+        }
+
+        function Modificar(){
+            var nombre = document.querySelector('#nombre').value
+            var apellido = document.querySelector('#apellido').value
+            var username = document.querySelector('#username').value
+            var contraseña = document.querySelector('#contraseña').value
+
+            var objeto = {
+            'nombre': nombre,
+            'apellido': apellido,
+            'username': username,
+            'contraseña': contraseña
+            }
+            console.log(objeto)
+
+            fetch(`http://localhost:3000/usuarios/${username}`, {
+                method: 'PUT',
+                body: JSON.stringify(objeto), // Siempre convertir en JSON nuestro objeto
+                headers:{
+                    'Content-Type': 'application/json'
+                } 
+            })
+            .then(res => res.json())
+            .catch(error => {
+                console.error('Error:', error)
+                alert("Ocurrio un error al consumir la API, revise la consola")
+            })
+            .then(response =>{
+                console.log('Success:', response);
+                alert(response.message)
+                location.href="PrincipalA.html"
+            }) 
+
+        }
+
+        function Regresar(){
+            location.href="PrincipalA.html"
+        }
+    </script>>
+</body>
+
+</html>

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Mi Playlist</title> </head>
+    <link rel="stylesheet" href="main.css">
+
+    <header>
+      <div id="sidebar">
+      <div class="toggle-btn">
+        <span>&#9776</span>
+      </div>
+      <ul>
+        <li>
+          <img src="img/logo.jpg" alt="Logo Fazt" class="logo">
+        </li>
+        <li id="logeado" >User</li>
+        <li><a href="#about"><i class="bx bx-user"></i> <span onclick="MiPerfil()">Mi Perfil</span></a></li> 
+        <li><a href="#about"><i class="bx bx-user"></i> <span onclick="Canciones()">Canciones</span></a></li>
+        <li><a href="#about"><i class="bx bx-user"></i> <span onclick="">Mi Playlist</span></a></li>
+        <li><a href="#about"><i class="bx bx-user"></i> <span onclick="Solicitud()">Solicitud</span></a></li> 
+        <li><a href="#about"><i class="bx bx-user"></i> <span onclick="CerrarSesion()">Cerrar Sesion</span></a></li>    
+
+      </ul>
+    </div>
+    </header>
+  <body onload="MostrarMisCanciones()">
+
+    <form>
+      <div class="">
+        <h2>Mis Canciones</h2>
+      </div>
+      
+      <table>
+      <tbody id="CuerpoCanciones">
+      </tbody>
+      </table>
+    
+    </form>
+
+    <!-- script para conectar con el archivo main.js -->
+    <script src="main.js"></script>
+    
+    <script>
+
+      function MostrarMisCanciones(){
+
+        var nombre = document.querySelector('#logeado')
+        var usuario = sessionStorage.usuario
+        nombre.innerHTML = usuario
+          
+        var contenido = document.querySelector('#CuerpoCanciones') 
+        contenido.innerHTML = ""
+        fetch(`http://localhost:3000/playlist/${usuario}`)
+        .then(response => response.json())
+        .catch(error => {
+          console.log(error)
+        })
+        .then(res => {
+          
+          for (var i in res) {
+            var espacio = "-----"
+            console.log(res[i])
+            contenido.innerHTML += 
+            `
+            <iframe src="${res[i].spotify}" width="250" height="250" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+            ${espacio}`
+                
+          }
+        })
+
+      }
+
+      function MiPerfil(){
+        location.href="Mi PerfilC.html"
+      }
+
+      function Canciones(){
+        location.href="CancionesC.html"
+      }
+
+      function Solicitud(){
+        location.href="Solicitud.html"
+      }
+
+      function CerrarSesion(){
+        location.href="Login.html"
+      }
+
+
+    </script>
+
+  </body>
+</html>

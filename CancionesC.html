@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Canciones</title> </head>
+    <link rel="stylesheet" href="main.css">
+
+    <header>
+      <div id="sidebar">
+      <div class="toggle-btn">
+        <span>&#9776</span>
+      </div>
+      <ul>
+        <li>
+          <img src="img/logo.jpg" alt="Logo Fazt" class="logo">
+        </li>
+        <li id="logeado" >User</li>
+        <li><a href="#about"><i class="bx bx-user"></i> <span onclick="MiPerfil()">Mi Perfil</span></a></li> 
+        <li><a href="#about"><i class="bx bx-user"></i> <span onclick="">Canciones</span></a></li>
+        <li><a href="#about"><i class="bx bx-user"></i> <span onclick="Playlist()">Mi Playlist</span></a></li>
+        <li><a href="#about"><i class="bx bx-user"></i> <span onclick="Solicitud()">Solicitud</span></a></li> 
+        <li><a href="#about"><i class="bx bx-user"></i> <span onclick="CerrarSesion()">Cerrar Sesion</span></a></li>    
+
+      </ul>
+    </div>
+    </header>
+  <body onload="MostrarCanciones()">
+
+    <form>
+    <div class="">
+      <h2>Canciones disponibles</h2>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+        <th scope="col">Nombre</th>
+        <th scope="col">Reproducir</th>
+        <th scope="col">Agregar</th>
+        <th scope="col">Detalles</th>
+        </tr>
+
+      </thead>
+     
+      <tbody id="CuerpoCanciones">
+      </tbody>
+    </table>
+    </form>
+
+    <!-- script para conectar con el archivo main.js -->
+    <script src="main.js"></script>
+    
+    <script>
+
+      function MostrarCanciones(){
+
+        var nombre = document.querySelector('#logeado')
+        var iniciado = sessionStorage.usuario
+        nombre.innerHTML = iniciado
+          
+        var contenido = document.querySelector('#CuerpoCanciones') 
+        contenido.innerHTML = ""
+        fetch('http://localhost:3000/canciones')
+        .then(response => response.json())
+        .catch(error => {
+          console.log(error)
+        })
+        .then(res => {
+              
+          for (var i in res) {
+            console.log(res[i])
+            contenido.innerHTML += 
+            `<tr>
+            <th>${res[i].nombre}</th>
+            <th><iframe src="${res[i].spotify}" width="300" height="250" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe></th>
+            <th> <button type="button" value="${res[i].id}" onclick="agregarPlaylist(this)">Agregar a mi Playlist</button>
+            <th> <button type="button" value="${res[i].id}" onclick="Detalles(this)">Detalles</button>
+            </tr>`
+                
+          }
+        })
+
+      }
+
+      function agregarPlaylist(boton){
+        
+        var id = boton.value
+        var usuario = sessionStorage.usuario
+        var spotify
+
+        fetch(`http://localhost:3000/canciones/${id}`)
+        .then(response => response.json())
+        .catch(error => {
+          console.log(error)
+        })
+        .then(res =>{
+          console.log(res)
+          spotify = res.spotify
+
+          var objeto = {
+            'usuario': usuario,
+            'spotify': spotify
+          }
+          console.log(objeto)
+
+          fetch('http://localhost:3000/playlist', {
+            method: 'POST',
+            body: JSON.stringify(objeto),
+            headers:{
+              'Content-Type': 'application/json'
+            }
+          })
+          .then(res => res.json())
+          .catch(err => {
+            console.error('Error:', err)
+            alert("Ocurrio un error, ver la consola")
+          })
+          .then(response =>{
+            console.log(response);
+            console.log(response.message)
+            alert(response.reason)
+                
+          })
+          
+                
+        }) //Finaliza el 2do .then del primer fetch
+        
+      }
+
+      function Detalles(boton){
+        var cancion = boton.value
+
+        sessionStorage.setItem("id", cancion)
+
+        location.href = "Detalles.html"
+      }
+
+      function MiPerfil(){
+        location.href="Mi PerfilC.html"
+      }
+
+      function Playlist(){
+        location.href="Playlist.html"
+      }
+
+      function Solicitud(){
+        location.href="Solicitud.html"
+      }
+
+      function CerrarSesion(){
+        location.href="Login.html"
+      }
+
+
+    </script>
+
+  </body>
+</html>

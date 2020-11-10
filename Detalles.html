@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Detalles de la Cancion</title> </head>
+    <link rel="stylesheet" href="main.css">
+
+    <header>
+      <div id="sidebar">
+      <div class="toggle-btn">
+        <span>&#9776</span>
+      </div>
+      <ul>
+        <li>
+          <img src="img/logo.jpg" alt="Logo Fazt" class="logo">
+        </li>
+        <li id="logeado" >User</li>
+        <li><a href="#about"><i class="bx bx-user"></i> <span onclick="MiPerfil()">Mi Perfil</span></a></li> 
+        <li><a href="#about"><i class="bx bx-user"></i> <span onclick="Canciones()">Canciones</span></a></li>
+        <li><a href="#about"><i class="bx bx-user"></i> <span onclick="Playlist()">Mi Playlist</span></a></li>
+        <li><a href="#about"><i class="bx bx-user"></i> <span onclick="Solicitud()">Solicitud</span></a></li> 
+        <li><a href="#about"><i class="bx bx-user"></i> <span onclick="CerrarSesion()">Cerrar Sesion</span></a></li>    
+
+      </ul>
+    </div>
+    </header>
+  <body onload="MostrarCancion()">
+
+    <form>
+    <div class="">
+      <h2>Información de la canción</h2>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+        <th scope="col">Nombre</th>
+        <th scope="col">Artista</th>
+        <th scope="col">Album</th>
+        <th scope="col">Fecha</th>
+        <th scope="col">Imagen</th>
+        <th scope="col">Video Oficial</th>
+        </tr>
+
+      </thead>
+     
+      <tbody id="CuerpoCanciones">
+      </tbody>
+    </table>
+    </form>
+
+    <form>
+      <h2>Comentarios</h2>
+
+      <table>
+        <thead>
+          <tr>
+          <th scope="col">Usuario</th>
+          <th scope="col">Reseña</th>
+          </tr>
+        </thead>
+     
+        <tbody id="CuerpoComentarios"></tbody>
+      </table>
+    </form>
+
+    <form>
+      <h2>Mi Comentario</h2>
+      <input id="comentario" type="text" placeholder="Mi reseña sobre la canción">
+      <button onclick="EnviarComentario()" type="button">Enviar Comentario</button>
+    </form>
+
+    <!-- script para conectar con el archivo main.js -->
+    <script src="main.js"></script>
+    
+    <script>
+
+      function MostrarCancion(){
+
+        var nombre = document.querySelector('#logeado')
+        var iniciado = sessionStorage.usuario
+        nombre.innerHTML = iniciado
+
+        //Recuperando el id de la cancion que esta en la pagina anterior
+        var id = sessionStorage.id
+          
+        var contenido = document.querySelector('#CuerpoCanciones') 
+        contenido.innerHTML = ""
+        fetch(`http://localhost:3000/canciones/${id}`)
+        .then(response => response.json())
+        .catch(error => {
+          console.log(error)
+        })
+        .then(res => {
+          console.log(res)
+          contenido.innerHTML = 
+            `<tr>
+            <th>${res.nombre}</th>
+            <th>${res.artista}</th>
+            <th>${res.album}</th>
+            <th>${res.fecha}</th>
+            <th><img src="${res.imagen}" class="img-fluid" height="250" width="200"> </th>
+            <th><iframe width="350" height="250" src="${res.youtube}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></th>
+            </tr>`    
+          
+        })
+
+        MostrarComentarios()
+
+      }
+
+      function MostrarComentarios(){
+
+        //Recuperando el id de la cancion que esta en la pagina anterior
+        var id = sessionStorage.id
+
+        var contenido = document.querySelector('#CuerpoComentarios') 
+        contenido.innerHTML = ""
+        fetch(`http://localhost:3000/comentarios/${id}`)
+        .then(response => response.json())
+        .catch(error => {
+          console.log(error)
+        })
+        .then(res => {
+          for (var i in res) {
+            console.log(res[i])
+            contenido.innerHTML += 
+            `<tr>
+            <th>${res[i].usuario}</th>
+            <th>${res[i].comentario}</th>
+            </tr>`   
+          } 
+          
+        })
+      }
+
+      function EnviarComentario(){
+        var usuario = sessionStorage.usuario
+        var id = sessionStorage.id
+        var comentario = document.querySelector('#comentario').value
+        
+        var objeto = {
+          'usuario': usuario,
+          'comentario': comentario,
+          'idCancion': id
+        }
+
+        console.log(objeto)
+
+        fetch('http://localhost:3000/comentarios', {
+          method: 'POST',
+          body: JSON.stringify(objeto),
+          headers:{
+            'Content-Type': 'application/json'
+          }
+        })
+        .then(res => res.json())
+        .catch(err => {
+          console.error('Error:', err)
+          alert("Ocurrio un error, ver la consola")
+        })
+        .then(response =>{
+          console.log(response);
+          console.log(response.message)
+          alert(response.reason)
+          location.href="Detalles.html"    
+        })
+
+      }
+      
+      function MiPerfil(){
+        location.href="Mi PerfilC.html"
+      }
+
+      function Canciones(){
+        location.href="CancionesC.html"
+      }
+
+      function Playlist(){
+        location.href="Playlist.html"
+      }
+
+      function Solicitud(){
+        location.href="Solicitud.html"
+      }
+
+      function CerrarSesion(){
+        location.href="Login.html"
+      }
+
+
+    </script>
+
+  </body>
+</html>

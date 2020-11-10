@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Music Station</title> </head>
+    <link rel="stylesheet" href="Principal.css">
+
+    <header>
+      <div id="sidebar">
+      <div class="toggle-btn">
+        <span>&#9776</span>
+      </div>
+      <ul>
+        <li>
+          <img src="img/logo.jpg" alt="Logo Fazt" class="logo">
+        </li>
+        <li id="logeado" >User</li>
+        <li><a href="#about"><i class="bx bx-user"></i> <span onclick="MiPerfil()">Mi Perfil</span></a></li> 
+        <li><a href="#about"><i class="bx bx-user"></i> <span onclick="Canciones()">Canciones</span></a></li>
+        <li><a href="#about"><i class="bx bx-user"></i> <span onclick="Usuarios()">Usuarios</span></a></li>
+        <li><a href="#about"><i class="bx bx-user"></i> <span onclick="Solicitudes()">Solicitudes</span></a></li>
+        <li><a href="#about"><i class="bx bx-user"></i> <span onclick="RegistroAdmin()">Registro</span></a></li>
+        <li><a href="#about"><i class="bx bx-user"></i> <span onclick="CerrarSesion()">Cerrar Sesion</span></a></li>    
+
+      </ul>
+    </div>
+    </header>
+
+  <body>
+
+    <!-- script para conectar con el archivo main.js -->
+    <script src="main.js"></script>
+    <script>
+
+      var nombre = document.querySelector('#logeado')
+      var iniciado = sessionStorage.usuario
+      nombre.innerHTML = `Bienvenido: </br> ${iniciado}`
+
+      function MiPerfil(){
+        location.href="Mi PerfilA.html"
+      }
+
+      function Canciones(){
+        location.href="CancionesA.html"
+      }
+
+      function Usuarios(){
+        location.href="Usuarios.html"
+      }
+
+      function Solicitudes(){
+        location.href="Solicitudes.html"
+      }
+
+      function RegistroAdmin(){
+        location.href="RegistroAdmin.html"
+      }
+
+      function CerrarSesion(){
+        location.href="Login.html"
+      }
+
+    </script>
+
+  </body>
+</html>

@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Comentarios</title> </head>
+    <link rel="stylesheet" href="main.css">
+
+    <header>
+      <div id="sidebar">
+      <div class="toggle-btn">
+        <span>&#9776</span>
+      </div>
+      <ul>
+        <li>
+          <img src="img/logo.jpg" alt="Logo Fazt" class="logo">
+        </li>
+        <li id="logeado" >User</li>
+        <li><a href="#about"><i class="bx bx-user"></i> <span onclick="MiPerfil()">Mi Perfil</span></a></li> 
+        <li><a href="#about"><i class="bx bx-user"></i> <span onclick="Canciones()">Canciones</span></a></li>
+        <li><a href="#about"><i class="bx bx-user"></i> <span onclick="Usuarios()">Usuarios</span></a></li>
+        <li><a href="#about"><i class="bx bx-user"></i> <span onclick="Solicitudes()">Solicitudes</span></a></li>
+        <li><a href="#about"><i class="bx bx-user"></i> <span onclick="RegistroAdmin()">Registro</span></a></li>
+        <li><a href="#about"><i class="bx bx-user"></i> <span onclick="CerrarSesion()">Cerrar Sesion</span></a></li>   
+
+      </ul>
+    </div>
+    </header>
+  <body onload="MostrarCancion()">
+
+    <form>
+    <div class="">
+      <h2>Detalles</h2>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+        <th scope="col">Nombre</th>
+        <th scope="col">Artista</th>
+        <th scope="col">Album</th>
+        <th scope="col">Fecha</th>
+        <th scope="col">Imagen</th>
+        <th scope="col">Video Oficial</th>
+        </tr>
+
+      </thead>
+     
+      <tbody id="CuerpoCanciones">
+      </tbody>
+    </table>
+    </form>
+
+    <form>
+      <h2>Comentarios</h2>
+
+      <table>
+        <thead>
+          <tr>
+          <th scope="col">Usuario</th>
+          <th scope="col">Reseña</th>
+          </tr>
+        </thead>
+     
+        <tbody id="CuerpoComentarios"></tbody>
+      </table>
+    </form>
+
+    <!-- script para conectar con el archivo main.js -->
+    <script src="main.js"></script>
+    
+    <script>
+
+      function MostrarCancion(){
+
+        var nombre = document.querySelector('#logeado')
+        var iniciado = sessionStorage.usuario
+        nombre.innerHTML = iniciado
+
+        //Recuperando el id de la cancion que esta en la pagina anterior
+        var id = sessionStorage.buscar
+          
+        var contenido = document.querySelector('#CuerpoCanciones') 
+        contenido.innerHTML = ""
+        fetch(`http://localhost:3000/canciones/${id}`)
+        .then(response => response.json())
+        .catch(error => {
+          console.log(error)
+        })
+        .then(res => {
+          console.log(res)
+          contenido.innerHTML = 
+            `<tr>
+            <th>${res.nombre}</th>
+            <th>${res.artista}</th>
+            <th>${res.album}</th>
+            <th>${res.fecha}</th>
+            <th><img src="${res.imagen}" class="img-fluid" height="250" width="200"> </th>
+            <th><iframe width="350" height="250" src="${res.youtube}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></th>
+            </tr>`    
+          
+        })
+
+        MostrarComentarios()
+
+      }
+
+      function MostrarComentarios(){
+
+        //Recuperando el id de la cancion que esta en la pagina anterior
+        var id = sessionStorage.buscar
+
+        var contenido = document.querySelector('#CuerpoComentarios') 
+        contenido.innerHTML = ""
+        fetch(`http://localhost:3000/comentarios/${id}`)
+        .then(response => response.json())
+        .catch(error => {
+          console.log(error)
+        })
+        .then(res => {
+          for (var i in res) {
+            console.log(res[i])
+            contenido.innerHTML += 
+            `<tr>
+            <th>${res[i].usuario}</th>
+            <th>${res[i].comentario}</th>
+            </tr>`   
+          } 
+          
+        })
+      }
+      
+      function MiPerfil(){
+        location.href="Mi PerfilA.html"
+      }
+
+      function Canciones(){
+        location.href="CancionesA.html"
+      }
+
+      function Usuarios(){
+        location.href="Usuarios.html"
+      }
+
+      function Solicitudes(){
+        location.href="Solicitudes.html"
+      }
+
+      function RegistroAdmin(){
+        location.href="RegistroAdmin.html"
+      }
+
+      function CerrarSesion(){
+        location.href="Login.html"
+      }
+
+
+    </script>
+
+  </body>
+</html>

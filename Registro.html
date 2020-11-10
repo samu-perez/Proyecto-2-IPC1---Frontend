@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Registro</title>
+    <link rel="stylesheet" href="Login.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css">
+
+</head>
+
+<body>
+    <form action="Registro.html" class="form-box animated fadeInUp">
+        <h1 class="form-title">REGISTRO</h1>
+        <input id="nombre" type="text" placeholder="Nombre" autofocus>
+        <input id="apellido" type="text" placeholder="Apellido" autofocus>
+        <input id="username" type="text" placeholder="Usuario" autofocus>
+        <input id="contraseña" type="password" placeholder="Contraseña">
+        <input type="password" placeholder="Confirmar Contraseña">
+        <button onclick="Registrarse()" type="button">
+            Registrarse
+        </button>
+        <button onclick="Regresar()" type="button">
+            Regresar
+        </button>
+        
+    </form>
+
+    <script>
+        function Registrarse(){
+            var nombre = document.querySelector('#nombre').value
+            var apellido = document.querySelector('#apellido').value
+            var username = document.querySelector('#username').value
+            var contraseña = document.querySelector('#contraseña').value
+
+            var objeto = {
+                'nombre': nombre,
+                'apellido': apellido,
+                'username': username,
+                'contraseña': contraseña
+            }
+
+            console.log(objeto)
+
+            fetch('http://localhost:3000/usuarios', {
+                method: 'POST',
+                body: JSON.stringify(objeto),
+                headers:{
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(res => res.json())
+            .catch(err => {
+                console.error('Error:', err)
+                alert("Ocurrio un error, ver la consola")
+            })
+            .then(response =>{
+                console.log(response);
+                console.log(response.message)
+                if(response.message == "Failed"){
+                    alert(response.reason)
+                } else{
+                    alert("Usuario agregado")
+                    location.href="Login.html"
+                }
+            })
+        }
+
+        function Regresar(){
+            location.href="Login.html"
+        }
+    </script>>
+</body>
+
+</html>
